@@ -8,7 +8,7 @@ const getUser = async (id) => {
 }
 
 const getPosts = async (user) => {
-  const res = await fetch(`${url}/posts?userId=${user.id}&_limit=3`)
+  const res = await fetch(`${url}/posts?userId=${user.id}&_limit=4`)
   const posts = await res.json();
 
   return posts;
@@ -31,12 +31,24 @@ const getBlogContent = async () => {
     const user = await getUser(1);
     const posts = await getPosts(user);
     await getCommentsForEachPost(posts);
-
-    console.log(user);
-    console.log(post);
+   
+    posts.forEach(post => {
+      content.innerHTML += `
+      <div class="post">
+        <h4>${post.title}</h4>
+        <p>${post.body}</p>
+        <br>
+        ${post.comments.map(c => `<p><span>${c.email}:</span>${c.body}</p>`).join('')}
+      </div>
+      `;
+    })
   } catch (err) {
     console.log(err);
   }
 }
 
 getBlogContent();
+
+const loadAdds = () => {
+  console.log('Adds loaded');
+}
